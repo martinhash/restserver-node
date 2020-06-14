@@ -11,6 +11,17 @@ process.env.PORT = process.env.PORT || 3000;
 process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 
 // ===============
+// =TOKEN EXPIRED=
+// ===============
+process.env.TOKEN_EXPIRED = 60 * 60 * 24 * 30;
+
+// ===============
+// =SEED AUTH=====
+// ===============
+process.env.SEED = process.env.SEED || 'este es el seed desarrollo';
+
+
+// ===============
 // ====DATABASE===
 // ===============
 let urlDB;

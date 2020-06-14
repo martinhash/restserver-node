@@ -2,11 +2,12 @@ const express = require('express');
 const bycript = require('bcrypt');
 const _ = require('underscore');
 const User = require('../models/user');
+const { authToken } = require('../middlewares/authentication');
 
 const app = express();
 
 
-app.get('/usuario', function (req, res) {
+app.get('/usuario', authToken, (req, res) => {
   
 
     let from = req.query.from || 0;
