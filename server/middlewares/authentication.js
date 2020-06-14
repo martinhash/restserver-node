@@ -8,19 +8,35 @@ let authToken = (req, res, next) => {
     jwt.verify(token, process.env.SEED, (err, decoded) => {
         
         if(err){
-            console.log(err);
-            
             return res.status(401).json({
                 ok: false,
                 err
             })
         }else{
-            req.users = decoded.users
+            req.user = decoded.user
             next();
         }
     })
 }
 
+let authAdminRole = (req, res, next) => {
+
+    let user = req.user;
+    if(user.role !== 'ADMIN_ROLE'){
+        return res.json({
+            ok: false,
+            err: {
+                message: 'Usted no es Administrador'
+            }
+        })
+    }
+    next();
+    
+    
+
+}
+
 module.exports = {
-    authToken
+    authToken,
+    authAdminRole
 }

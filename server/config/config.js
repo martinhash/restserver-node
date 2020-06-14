@@ -18,7 +18,7 @@ process.env.TOKEN_EXPIRED = 60 * 60 * 24 * 30;
 // ===============
 // =SEED AUTH=====
 // ===============
-process.env.SEED = process.env.SEED || 'este es el seed desarrollo';
+process.env.SEED = process.env.SEED || 'this-is-dev-seed';
 
 
 // ===============

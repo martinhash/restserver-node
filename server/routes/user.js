@@ -2,23 +2,18 @@ const express = require('express');
 const bycript = require('bcrypt');
 const _ = require('underscore');
 const User = require('../models/user');
-const { authToken } = require('../middlewares/authentication');
+const { authToken, authAdminRole } = require('../middlewares/authentication');
 
 const app = express();
 
 
 app.get('/usuario', authToken, (req, res) => {
-  
 
     let from = req.query.from || 0;
     from = Number(from);
-
     let limit = req.query.limit || 5; 
     limit = Number(limit);
-
     let state = req.query.state || true;
-    
-
     User.find({state})
     .skip(from)
     .limit(limit)
@@ -38,12 +33,9 @@ app.get('/usuario', authToken, (req, res) => {
                 })
             }
         })
-    
-
-
 })
   
-app.post('/usuario', function (req, res) {
+app.post('/usuario', [authToken, authAdminRole], function (req, res) {
 
     let body = req.body;
 
@@ -70,7 +62,7 @@ app.post('/usuario', function (req, res) {
     });
 })
   
-app.put('/usuario/:id', function (req, res) {
+app.put('/usuario/:id', [authToken, authAdminRole], function (req, res) {
       let id = req.params.id;
       let body = _.pick(req.body, ['name', 'email', 'img', 'role']);
       
@@ -90,13 +82,11 @@ app.put('/usuario/:id', function (req, res) {
 })
   
 //DELETE USER BY STATE
-app.delete('/usuario/:id', function (req, res) {
-
+app.delete('/usuario/:id', [authToken, authAdminRole], function (req, res) {
     let id = req.params.id;
     let changeState = {
         state: false
     }
-
     User.findByIdAndUpdate(id, changeState, (err, userRemove) => {
         if(err){
             return res.status(400).json({
@@ -117,7 +107,6 @@ app.delete('/usuario/:id', function (req, res) {
             })
         }
     })
-
 })
 
 module.exports = app;
