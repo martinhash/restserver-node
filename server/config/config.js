@@ -1,28 +1,28 @@
 
 // ===============
-// ====PUERTO===
+// PUERTO
 // ===============
 process.env.PORT = process.env.PORT || 3000;
 
 
 // ===============
-// ====ENTORNO===
+// ENTORNO
 // ===============
 process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 
 // ===============
-// =TOKEN EXPIRED=
+// TOKEN EXPIRED
 // ===============
 process.env.TOKEN_EXPIRED = 60 * 60 * 24 * 30;
 
 // ===============
-// =SEED AUTH=====
+// SEED AUTH
 // ===============
 process.env.SEED = process.env.SEED || 'this-is-dev-seed';
 
 
 // ===============
-// ====DATABASE===
+// DATABASE
 // ===============
 let urlDB;
 if(process.env.NODE_ENV === 'dev'){
@@ -32,3 +32,9 @@ if(process.env.NODE_ENV === 'dev'){
 }
 
 process.env.URLDB = urlDB;
+
+// ===============
+// Google client ID
+// ===============
+
+process.env.CLIENT_ID = process.env.CLIENT_ID || '228673711599-ce7og0il8ms68a10eh7msft17ue56nft.apps.googleusercontent.com';
