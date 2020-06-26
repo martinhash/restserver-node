@@ -1,5 +1,5 @@
 const express = require('express');
-let { authToken } = require('../middlewares/authentication');
+let { authToken, authAdminRole } = require('../middlewares/authentication');
 
 let app = express();
 let Product = require('../models/product');
@@ -133,7 +133,7 @@ app.get('/producto/:id', (req, res) => {
 //=========================
 //DEJAR PRODUCTO FUERA DE STOCK
 //=========================
-app.delete('/producto/:id', (req, res) => {
+app.delete('/producto/:id', [authToken, authAdminRole], (req, res) => {
     let id = req.params.id;
     Product.findById( id, (err, productDB) => {
         if(err){
@@ -171,7 +171,7 @@ app.delete('/producto/:id', (req, res) => {
 //=========================
 //ACTUALIZAR PRODUCTO
 //=========================
-app.put('/producto/:id', (req, res) => {
+app.put('/producto/:id', [authToken, authAdminRole], (req, res) => {
     let id = req.params.id;
     let body = req.body;
 
