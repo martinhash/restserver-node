@@ -1,9 +1,9 @@
 const express = require('express');
 const fileUpload = require('express-fileupload');
 let app = express();
-
 const User = require('../models/user');
-const { LoginTicket } = require('google-auth-library');
+const fs = require('fs');
+const path = require('path');
 
 app.use( fileUpload({ useTempFiles: true }) );
 
@@ -43,7 +43,12 @@ app.put('/upload/:tipo/:id', function(req, res){
                 err
             });
         }
-        userImage(id, res, nameFile);
+        if(type === 'users'){
+            userImage(id, res, nameFile);
+        }
+        if(type === 'products'){
+            productsImage(id, res, nameFile);
+        }
       });
 })
 
@@ -51,12 +56,14 @@ app.put('/upload/:tipo/:id', function(req, res){
 function userImage(id, res, nameFile){
     User.findById(id, (err, userDB) => {
         if(err){
+            deleteFile(nameFile, 'users');
             return res.status(500).json({
                 ok:false,
                 err
             });
         }
         if(!userDB){
+            deleteFile(nameFile, 'users');
             return res.status(400).json({
                 ok:false,
                 err: {
@@ -64,6 +71,7 @@ function userImage(id, res, nameFile){
                 }
             });
         }
+        deleteFile(userDB.img, 'users');
         userDB.img = nameFile;
         userDB.save((err, userSave) => {
             if(err){
@@ -78,6 +86,13 @@ function userImage(id, res, nameFile){
             });
         })
     })
+}
+
+function deleteFile(nameFile, type){
+    let pathUrl = path.resolve(__dirname, `../../uploads/users/${ nameFile }`);
+        if(fs.existsSync(pathUrl)){
+            fs.unlinkSync(pathUrl);
+        }
 }
 
 module.exports = app;
