@@ -2,6 +2,7 @@ const express = require('express');
 const fileUpload = require('express-fileupload');
 let app = express();
 const User = require('../models/user');
+const Product = require('../models/product');
 const fs = require('fs');
 const path = require('path');
 
@@ -52,6 +53,31 @@ app.put('/upload/:tipo/:id', function(req, res){
       });
 })
 
+function productsImage(id, res, nameFile){
+    Product.findById(id, (err, productDB) => {
+        if(err){
+            deleteFile(nameFile, 'products');
+            return res.status(500).json({
+                ok:false,
+                err
+            });
+        }
+        deleteFile(productDB.img, 'products');
+        productDB.img = nameFile;
+        productDB.save((err, productSave) => {
+            if(err){
+                return res.status(500).json({
+                    ok:false,
+                    err
+                });
+            }
+            res.json({
+                ok: true,
+                user: productSave
+            });
+        })
+    })
+}
 
 function userImage(id, res, nameFile){
     User.findById(id, (err, userDB) => {
@@ -89,7 +115,7 @@ function userImage(id, res, nameFile){
 }
 
 function deleteFile(nameFile, type){
-    let pathUrl = path.resolve(__dirname, `../../uploads/users/${ nameFile }`);
+    let pathUrl = path.resolve(__dirname, `../../uploads/${ type }/${ nameFile }`);
         if(fs.existsSync(pathUrl)){
             fs.unlinkSync(pathUrl);
         }
