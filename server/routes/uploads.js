@@ -25,8 +25,6 @@ app.put('/upload/:tipo/:id', function(req, res){
             message: 'Los tipos validos son: ' + validTypes.join(', ')
         })
     }
-    console.log(req.files);
-    
     let fileUpload = req.files.fileUpload;
     let nameSplitFile = fileUpload.name.split('.');
     let extension = nameSplitFile[nameSplitFile.length - 1];
@@ -39,10 +37,8 @@ app.put('/upload/:tipo/:id', function(req, res){
     }
     // Cambiar nombre archivo
     let nameFile = `${ id }-${ new Date().getMilliseconds() }${ extension }`
-    fileUpload.mv(`/uploads/${ type }/${ nameFile }`, (err) => {
+    fileUpload.mv(`uploads/${ type }/${ nameFile }`, (err) => {
         if (err){
-            console.log(err);
-            
             return res.status(500).json({
                 ok:false,
                 err
